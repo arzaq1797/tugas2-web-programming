@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stok Bahan Ajar</title>
+  <script src="js/data.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+  <header style="position: sticky;top: 0;">
+    <nav class="navbar">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="stok.html">Informasi Bahan Ajar</a>
+      <a href="tracking.html">Tracking Pengiriman</a>
+      <div class="dropdown">
+        <button class="dropbtn">Laporan &#9662;</button>
+        <div class="dropdown-content">
+          <a href="#monitoring">Monitoring Progress DO Bahan Ajar</a>
+          <a href="#rekap">Rekap Bahan Ajar</a>
+        </div>
+      </div>
+      <a href="#histori">Histori Transaksi Bahan Ajar</a>
+    </nav>
+  </header>
+
+  <main style="padding: 3rem;">
+    <h2>Stok Bahan Ajar</h2>
+    <h3 id="greeting"></h3>
+    <section class="section-tengah">
+      <table id="tabel-stok" style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+        <thead>
+          <tr style="background-color: #8b5cf6; color: white;">
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Kode Lokasi</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Kode Barang</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Nama Barang</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Jenis</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Edisi</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Stok</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <!-- Greeting berdasarkan waktu lokal (jam di perangkat pengguna). -->
+  <script>
+    var sekarang = new Date();
+    var jam = sekarang.getHours();
+    var sapaan;
+
+    if (jam < 11) {
+      sapaan = "Selamat Pagi";      // 00.00 - 10.59
+    } else if (jam < 15) {
+      sapaan = "Selamat Siang";     // 11.00 - 14.59
+    } else if (jam < 18) {
+      sapaan = "Selamat Sore";      // 15.00 - 17.59
+    } else {
+      sapaan = "Selamat Malam";     // 18.00 - 23.59
+    }
+
+    document.getElementById("greeting").textContent = sapaan + "!";
+  </script>
+
+  <!-- Tabel stok bahan ajar -->
+  <script>
+    var tbody = document.querySelector("#tabel-stok tbody");
+    dataBahanAjar.forEach(function (item) {
+      var row = document.createElement("tr");
+      row.innerHTML =
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.kodeLokasi + "</td>" +
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.kodeBarang + "</td>" +
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.namaBarang + "</td>" +
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.jenisBarang + "</td>" +
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.edisi + "</td>" +
+        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.stok + "</td>";
+      tbody.appendChild(row);
+    });
+  </script>
+
+</body>
+
+</html>

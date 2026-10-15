@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Menu Header Bahan Ajar</title>
+  <script src="js/data.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+  <header style="position: sticky;top: 0;">
+    <nav class="navbar">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="stok.html">Informasi Bahan Ajar</a>
+      <a href="tracking.html">Tracking Pengiriman</a>
+      <div class="dropdown">
+        <button class="dropbtn">Laporan &#9662;</button>
+        <div class="dropdown-content">
+          <a href="#monitoring">Monitoring Progress DO Bahan Ajar</a>
+          <a href="#rekap">Rekap Bahan Ajar</a>
+        </div>
+      </div>
+      <a href="#histori">Histori Transaksi Bahan Ajar</a>
+    </nav>
+  </header>
+
+  <main style="padding: 3rem;">
+    <h2>Dashboard Aplikasi SITTA</h2>
+    <h3 id="greeting"></h3>
+  </main>
+
+  <!-- Greeting berdasarkan waktu-->
+  <script>
+    var sekarang = new Date();
+    var jam = sekarang.getHours();
+    var sapaan;
+
+    if (jam < 11) {
+      sapaan = "Selamat Pagi";      // 00.00 - 10.59
+    } else if (jam < 15) {
+      sapaan = "Selamat Siang";     // 11.00 - 14.59
+    } else if (jam < 18) {
+      sapaan = "Selamat Sore";      // 15.00 - 17.59
+    } else {
+      sapaan = "Selamat Malam";     // 18.00 - 23.59
+    }
+
+    document.getElementById("greeting").textContent = sapaan + "!";
+  </script>
+
+
+
+</body>
+
+</html>
