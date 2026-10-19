@@ -54,16 +54,19 @@ body {
   font-weight: 600;
 }
 
-.grup-input input {
+.grup-input input,
+.grup-input select {
   padding: 0.7rem 0.9rem;
   font-size: 1rem;
+  font-family: inherit;
   color: inherit;
   background-color: #fffafc;
   border: 3px dashed #f9a8d4;
   border-radius: 12px;
 }
 
-.grup-input input:focus {
+.grup-input input:focus,
+.grup-input select:focus {
   outline: none;
   background-color: #ffffff;
   border: 3px solid #8b5cf6;

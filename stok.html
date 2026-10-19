@@ -7,6 +7,38 @@
   <script src="js/data.js"></script>
   <link rel="stylesheet" href="css/style.css">
 
+  <style>
+    /* Bagian atas modal: judul dan tombol x */
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem 1.25rem;
+      border-bottom: 2px dashed #f9a8d4;
+    }
+
+    .modal-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .modal-body {
+      padding: 1.25rem;
+    }
+
+    .close {
+      font-size: 2rem;
+      line-height: 1;
+      color: #6b5b7b;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #3b2f4a;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -40,10 +72,14 @@
             <th style="padding: 0.75rem; border: 1px solid #ddd;">Jenis</th>
             <th style="padding: 0.75rem; border: 1px solid #ddd;">Edisi</th>
             <th style="padding: 0.75rem; border: 1px solid #ddd;">Stok</th>
+            <th style="padding: 0.75rem; border: 1px solid #ddd;">Aksi</th>
           </tr>
         </thead>
         <tbody></tbody>
       </table>
+      <div style="margin-top: 1rem;">
+        <button type="button" class="tombol" onclick="bukaTambah()">+ Tambah Bahan Ajar</button>
+      </div>
     </section>
   </main>
 
@@ -63,23 +99,177 @@
       sapaan = "Selamat Malam";     // 18.00 - 23.59
     }
 
-    document.getElementById("greeting").textContent = sapaan + "!";
+    document.getElementById("greeting").textContent = `${sapaan}!`;
   </script>
 
   <!-- Tabel stok bahan ajar -->
   <script>
-    var tbody = document.querySelector("#tabel-stok tbody");
-    dataBahanAjar.forEach(function (item) {
-      var row = document.createElement("tr");
-      row.innerHTML =
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.kodeLokasi + "</td>" +
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.kodeBarang + "</td>" +
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.namaBarang + "</td>" +
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.jenisBarang + "</td>" +
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.edisi + "</td>" +
-        "<td style='padding: 0.75rem; border: 1px solid #ddd;'>" + item.stok + "</td>";
-      tbody.appendChild(row);
-    });
+    function tampilkanTabel() {
+      var tbody = document.querySelector("#tabel-stok tbody");
+      tbody.innerHTML = "";
+      dataBahanAjar.forEach(function (item, index) {
+        var row = document.createElement("tr");
+        row.innerHTML = `
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.kodeLokasi}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.kodeBarang}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.namaBarang}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.jenisBarang}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.edisi}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'>${item.stok}</td>
+          <td style='padding: 0.75rem; border: 1px solid #ddd;'><button type='button' class='tombol' onclick='lihatDetail(${index})'>Detail</button></td>`;
+        tbody.appendChild(row);
+      });
+    }
+
+    tampilkanTabel();
+  </script>
+
+  <!-- Modal detail bahan ajar -->
+  <div id="modal-detail" class="modal" role="dialog" aria-modal="true" aria-labelledby="judul-detail">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="judul-detail">Detail Bahan Ajar</h2>
+        <button type="button" onclick="tutupDetail()" class="close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="isi-detail"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // data.js tetap tidak diubah: tentukan URL cover di sini.
+    // URL eksternal (http/https) dipakai langsung, path relatif "img/" diarahkan ke "assets/img/".
+    function urlCover(url) {
+      if (url.startsWith("https://") || url.startsWith("http://")) {
+        return url;
+      }
+      if (url.startsWith("img/")) {
+        return `assets/${url}`;
+      }
+      return url;
+    }
+
+    function lihatDetail(index) {
+      var item = dataBahanAjar[index];
+
+      document.getElementById("isi-detail").innerHTML = `
+        <img src='${urlCover(item.cover)}' alt='Cover ${item.namaBarang}' style='width: 100%; border-radius: 8px; margin-bottom: 1rem;'>
+        <table style='width: 100%; border-collapse: collapse;'>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Kode Lokasi</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.kodeLokasi}</td></tr>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Kode Barang</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.kodeBarang}</td></tr>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Nama Barang</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.namaBarang}</td></tr>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Jenis</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.jenisBarang}</td></tr>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Edisi</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.edisi}</td></tr>
+          <tr><td style='padding: 0.5rem; border: 1px solid #ddd; font-weight: 600; background-color: #f9f1fb;'>Stok</td><td style='padding: 0.5rem; border: 1px solid #ddd;'>${item.stok}</td></tr>
+        </table>`;
+      document.getElementById("modal-detail").style.display = "block";
+    }
+
+    function tutupDetail() {
+      document.getElementById("modal-detail").style.display = "none";
+    }
+  </script>
+
+  <!-- Modal tambah bahan ajar baru (data hanya ada di memori, tidak mengubah data.js) -->
+  <div id="modal-tambah" class="modal" role="dialog" aria-modal="true" aria-labelledby="judul-tambah">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="judul-tambah">Tambah Bahan Ajar</h2>
+        <button type="button" onclick="tutupTambah()" class="close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-tambah">
+          <div class="grup-input">
+            <label for="tambah-lokasi">Kode Lokasi</label>
+            <input type="text" id="tambah-lokasi" name="kodeLokasi" placeholder="Contoh: 0JKT01" required
+              style="width: 100%;">
+          </div>
+          <div class="grup-input">
+            <label for="tambah-barang">Kode Barang</label>
+            <input type="text" id="tambah-barang" name="kodeBarang" placeholder="Contoh: EKMA4216" required
+              style="width: 100%;">
+          </div>
+          <div class="grup-input">
+            <label for="tambah-nama">Nama Barang</label>
+            <input type="text" id="tambah-nama" name="namaBarang" placeholder="Nama bahan ajar" required
+              style="width: 100%;">
+          </div>
+          <div class="grup-input">
+            <label for="tambah-jenis">Jenis</label>
+            <select id="tambah-jenis" name="jenisBarang" style="width: 100%;">
+              <option value="BMP">BMP</option>
+              <option value="WA">WA</option>
+            </select>
+          </div>
+          <div class="grup-input">
+            <label for="tambah-edisi">Edisi</label>
+            <input type="number" id="tambah-edisi" name="edisi" min="1" placeholder="Contoh: 1" required
+              style="width: 100%;">
+          </div>
+          <div class="grup-input">
+            <label for="tambah-stok">Stok</label>
+            <input type="number" id="tambah-stok" name="stok" min="0" placeholder="Contoh: 100" required
+              style="width: 100%;">
+          </div>
+          <div class="grup-input">
+            <label for="tambah-cover">URL Cover</label>
+            <input type="url" id="tambah-cover" name="cover" placeholder="https://contoh.com/cover.jpg"
+              oninput="pratinjauCover()" style="width: 100%;">
+            <img id="pratinjau-cover" alt="Pratinjau cover"
+              style="display: none; width: 100%; margin-top: 0.5rem; border-radius: 8px; border: 2px dashed #f9a8d4;">
+          </div>
+          <button type="submit" class="tombol" style="width: 100%;">Simpan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function bukaTambah() {
+      document.getElementById("form-tambah").reset();
+      document.getElementById("pratinjau-cover").style.display = "none";
+      document.getElementById("modal-tambah").style.display = "block";
+    }
+
+    function tutupTambah() {
+      document.getElementById("modal-tambah").style.display = "none";
+    }
+
+    function pratinjauCover() {
+      var input = document.getElementById("tambah-cover");
+      var pratinjau = document.getElementById("pratinjau-cover");
+      if (input.value.trim() === "") {
+        pratinjau.style.display = "none";
+      } else {
+        pratinjau.src = input.value.trim();
+        pratinjau.style.display = "block";
+      }
+    }
+
+    function tambahBahanAjar(event) {
+      event.preventDefault();
+      var form = event.target;
+
+      dataBahanAjar.push({
+        kodeLokasi: form.kodeLokasi.value.trim(),
+        kodeBarang: form.kodeBarang.value.trim(),
+        namaBarang: form.namaBarang.value.trim(),
+        jenisBarang: form.jenisBarang.value,
+        edisi: form.edisi.value,
+        stok: Number(form.stok.value),
+        cover: form.cover.value.trim()
+      });
+
+      tampilkanTabel();
+      tutupTambah();
+
+      var namaBaru = form.namaBarang.value.trim();
+      form.reset();
+      alert(`Bahan ajar "${namaBaru}" berhasil ditambahkan`);
+    }
+
+    document.getElementById("form-tambah").addEventListener("submit", tambahBahanAjar);
   </script>
 
 </body>
